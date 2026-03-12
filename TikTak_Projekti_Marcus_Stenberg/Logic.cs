@@ -5,39 +5,47 @@ namespace TikTak_Projekti_Marcus_Stenberg
     public class GameLogic
     {
         public char[] Board { get; set; }
-
         public char CurrentPlayer { get; set; }
+        public char LastPlayer { get; set; }
 
         public GameLogic()
         {
             Board = new char[9];
-
-            for (int i = 0; i < 9; i++)
-            {
-                Board[i] = ' ';
-            }
-
+            for (int i = 0; i < 9; i++) Board[i] = ' ';
             CurrentPlayer = 'X';
         }
 
-        public void MakeMove(int position)
+        public void ResetGame()
         {
-            if (position >= 1 && position <= 9)
-            {
-                if (Board[position - 1] == ' ')
-                {
-                    Board[position - 1] = CurrentPlayer;
+            for (int i = 0; i < 9; i++) Board[i] = ' ';
+            CurrentPlayer = 'X';
+        }
 
-                    if (CurrentPlayer == 'X')
-                    {
-                        CurrentPlayer = 'O';
-                    }
-                    else
-                    {
-                        CurrentPlayer = 'X';
-                    }
-                }
+        public bool CheckWinner()
+        {
+            char[] b = Board;
+
+            if (b[0] != ' ' && b[0] == b[1] && b[1] == b[2]) return true;
+            if (b[3] != ' ' && b[3] == b[4] && b[4] == b[5]) return true;
+            if (b[6] != ' ' && b[6] == b[7] && b[7] == b[8]) return true;
+
+            if (b[0] != ' ' && b[0] == b[3] && b[3] == b[6]) return true;
+            if (b[1] != ' ' && b[1] == b[4] && b[4] == b[7]) return true;
+            if (b[2] != ' ' && b[2] == b[5] && b[5] == b[8]) return true;
+
+            if (b[0] != ' ' && b[0] == b[4] && b[4] == b[8]) return true;
+            if (b[2] != ' ' && b[2] == b[4] && b[4] == b[6]) return true;
+
+            return false;
+        }
+
+        public bool CheckDraw()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if (Board[i] == ' ') return false;
             }
+            return true;
         }
     }
 
@@ -47,43 +55,25 @@ namespace TikTak_Projekti_Marcus_Stenberg
         {
             Console.WriteLine();
 
-            PrintCell(board, 0, cursor);
-            Console.Write("|");
-            PrintCell(board, 1, cursor);
-            Console.Write("|");
-            PrintCell(board, 2, cursor);
-
-            Console.WriteLine();
-            Console.WriteLine("---+---+---");
-
-            PrintCell(board, 3, cursor);
-            Console.Write("|");
-            PrintCell(board, 4, cursor);
-            Console.Write("|");
-            PrintCell(board, 5, cursor);
-
-            Console.WriteLine();
-            Console.WriteLine("---+---+---");
-
-            PrintCell(board, 6, cursor);
-            Console.Write("|");
-            PrintCell(board, 7, cursor);
-            Console.Write("|");
-            PrintCell(board, 8, cursor);
-
-            Console.WriteLine();
-        }
-
-        public void PrintCell(char[] board, int index, int cursor)
-        {
-            if (index == cursor)
+            for (int row = 0; row < 3; row++)
             {
-                Console.Write("[" + board[index] + "]");
+                for (int col = 0; col < 3; col++)
+                {
+                    int index = row * 3 + col;
+
+                    if (index == cursor)
+                        Console.Write("[" + board[index] + "]");
+                    else
+                        Console.Write(" " + board[index] + " ");
+
+                    if (col < 2) Console.Write("|");
+                }
+                Console.WriteLine();
+
+                if (row < 2) Console.WriteLine("---+---+---");
             }
-            else
-            {
-                Console.Write(" " + board[index] + " ");
-            }
+
+            Console.WriteLine();
         }
     }
 }

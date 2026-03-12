@@ -1,5 +1,4 @@
 ﻿using System;
-using TikTak_Projekti_Marcus_Stenberg;
 
 namespace TikTak_Projekti_Marcus_Stenberg
 {
@@ -8,83 +7,86 @@ namespace TikTak_Projekti_Marcus_Stenberg
         static void Main(string[] args)
         {
             // Ask user name
-            Console.Write("Enter your name: ");
+            Console.Write("Hi! What is your name? ");
             string playerName = Console.ReadLine();
 
             // Save start time
             DateTime startTime = DateTime.Now;
 
-            // Create objects
+            // Create game and printer objects
             GameLogic game = new GameLogic();
             BoardPrinter printer = new BoardPrinter();
 
-            // Cursor position
             int cursor = 0;
 
             while (true)
             {
-                // Clear screen
                 Console.Clear();
-
-                // Print information
                 Console.WriteLine("Player: " + playerName);
-                Console.WriteLine("Started: " + startTime);
-                Console.WriteLine("Use WASD to move, E to place, Q to quit");
+                Console.WriteLine("Game started at: " + startTime);
+                Console.WriteLine("Use ARROW KEYS to move, ENTER to place your symbol.");
 
-                // Print board with cursor
                 printer.PrintBoard(game.Board, cursor);
 
-                // Read key
                 ConsoleKey key = Console.ReadKey(true).Key;
 
-                if (key == ConsoleKey.Q)
-                {
-                    break;
-                }
+                // Move cursor
+                if (key == ConsoleKey.UpArrow && cursor > 2) cursor -= 3;
+                if (key == ConsoleKey.DownArrow && cursor < 6) cursor += 3;
+                if (key == ConsoleKey.LeftArrow && cursor % 3 != 0) cursor -= 1;
+                if (key == ConsoleKey.RightArrow && cursor % 3 != 2) cursor += 1;
 
-                if (key == ConsoleKey.W)
+                // Place symbol
+                if (key == ConsoleKey.Enter)
                 {
-                    cursor = cursor - 3;
-                    if (cursor < 0)
+                    if (game.Board[cursor] == ' ')
                     {
-                        cursor = 0;
+                        game.Board[cursor] = game.CurrentPlayer;
+                        game.LastPlayer = game.CurrentPlayer;
+
+                        // Switch player
+                        if (game.CurrentPlayer == 'X') game.CurrentPlayer = 'O';
+                        else game.CurrentPlayer = 'X';
+                    }
+                    else
+                    {
+                        Console.WriteLine("That spot is already taken! Press any key...");
+                        Console.ReadKey(true);
+                        continue;
+                    }
+
+                    // Check for winner
+                    if (game.CheckWinner())
+                    {
+                        Console.Clear();
+                        printer.PrintBoard(game.Board, cursor);
+                        Console.WriteLine("Congratulations! Player " + game.LastPlayer + " has won!");
+                        Console.WriteLine("Press R to play again or Q to quit.");
+
+                        ConsoleKey choice = Console.ReadKey(true).Key;
+                        if (choice == ConsoleKey.R) game.ResetGame();
+                        else break;
+                    }
+
+                    // Check for draw
+                    if (game.CheckDraw())
+                    {
+                        Console.Clear();
+                        printer.PrintBoard(game.Board, cursor);
+                        Console.WriteLine("It's a draw!");
+                        Console.WriteLine("Press R to play again or Q to quit.");
+
+                        ConsoleKey choice = Console.ReadKey(true).Key;
+                        if (choice == ConsoleKey.R) game.ResetGame();
+                        else break;
                     }
                 }
 
-                if (key == ConsoleKey.S)
-                {
-                    cursor = cursor + 3;
-                    if (cursor > 8)
-                    {
-                        cursor = 8;
-                    }
-                }
-
-                if (key == ConsoleKey.A)
-                {
-                    cursor = cursor - 1;
-                    if (cursor < 0)
-                    {
-                        cursor = 0;
-                    }
-                }
-
-                if (key == ConsoleKey.D)
-                {
-                    cursor = cursor + 1;
-                    if (cursor > 8)
-                    {
-                        cursor = 8;
-                    }
-                }
-
-                if (key == ConsoleKey.E)
-                {
-                    game.MakeMove(cursor + 1);
-                }
+                // Quit
+                if (key == ConsoleKey.Q) break;
             }
 
-            Console.WriteLine("Program closing. Thank you for playing.");
+            Console.WriteLine("Thanks for playing! Goodbye!");
         }
     }
 }
