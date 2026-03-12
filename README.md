@@ -70,16 +70,31 @@ TikTak_Projekti_Marcus_Stenberg/
 ---
 
 ## Versiohistoria
-- **1.0** – Peruslogiikka ja ruudukon tulostus  
-- **1.1** – Arrow key liikuttaminen ja ENTER syötteen käyttö  
-- **1.2** – Tasapelin ja voiton tarkistus, R-näppäin uudelleenkäynnistykseen  
-- **1.3** – Kolmen luokan rakenne: Program, GameLogic, BoardPrinter  
-- **1.4** – Värit lisätty: X = punainen, O = vihreä, kohdistin taustalla  
+
+1.0 – Peruslogiikka ja ruudukon tulostus
+
+1.1 – Nuolinäppäimet liikuttavat kohdistinta, ENTER syötteen käyttö
+
+1.2 – Tasapelin ja voiton tarkistus, R-näppäin uudelleenkäynnistykseen
+
+1.3 – Kolmen luokan rakenne: Program, GameLogic, BoardPrinter
+
+1.4 – Värit lisätty: X = punainen, O = vihreä, kohdistin taustalla
+
+1.5 – Tulosten tallennus results.txt
+1.5 – Uudet UI-metodit: SaveResult(...) ja ViewResults()
+1.5 – Tallennusmuoto: YYYY-MM-DD HH:mm:ss - X: <name> - O: <name> - Voittaja: <name/Tasapeli> - Siirrot: <turns>
+1.5 – Perusvirheenkäsittely tiedostolle (try/catch, käyttäjälle ilmoitus)
+1.5 – Kysytään molempien pelaajien nimet (playerXName, playerOName)
+1.5 – PrintHeader näyttää nykyisen pelaajan nimen + symbolin
+1.5 – PrintWinner näyttää voittajan nimen
+1.5 – Vuorojen laskenta: TurnCount kasvaa jokaisesta siirrosta, nollautuu uudessa pelissä
+1.5 – Ohjelman kulku: tallennetaan tulos voiton/tasapelin jälkeen, V-näppäin näyttää aiemmat tulokset
+1.5 – Nykyiset kontrollit säilyvät: ENTER = aseta, R = uusi peli, ESC = lopeta
 
 ---
 
 ## Tulevat parannukset (valinnainen)
-- Mahdollisuus tallentaa pelin historia tekstitiedostoon  
 - Peli yksinpeliä vastaan (AI)  
 - Parempi graafinen esitys (ASCII / Console art)
 
