@@ -32,3 +32,65 @@ Ohjelma tunnistaa automaattisesti **voiton (vaaka, pysty, vino)** ja **tasapelin
 ---
 
 ## Projektin rakenne
+TikTak_Projekti_Marcus_Stenberg/
+│
+├─ Program.cs # Pääohjelma, käyttäjän syötteet, pääsilmukka
+├─ GameLogic.cs # Pelin säännöt, lauta, tarkistukset voittajalle ja tasapelille
+├─ BoardPrinter.cs # Lautan tulostus, värit ja kohdistimen näyttäminen
+└─ README.md # Tämä tiedosto
+
+---
+
+## Käyttöohjeet
+
+1. Käynnistä ohjelma Visual Studio -konsolissa tai muussa C#-ympäristössä.
+2. Anna nimesi kun kysytään.
+3. Käytä **nuolinäppäimiä** liikuttaaksesi kohdistinta ruudukossa.
+4. Paina **ENTER** asettaaksesi X tai O valittuun ruutuun.
+5. **ESC** lopettaa ohjelman milloin tahansa.
+6. Kun peli loppuu voittoon tai tasapeliin:
+   - Paina **R** aloittaaksesi uuden pelin.
+   - Paina **ESC** lopettaaksesi ohjelman.
+
+---
+
+## Kehitystekniikat / oppimispisteet
+- Käytetty **luokkia ja olioita** (OOP)  
+- Eri **vastuualueet** eriytetty:  
+  - Pelilogiikka → GameLogic  
+  - Näyttö / värit → BoardPrinter  
+  - Käyttäjäsyötteet / silmukka → Program  
+- Harjoiteltu:
+  - Taulukoita ja silmukoita
+  - Ehtolauseita ja virheentarkistuksia
+  - Konsolin I/O ja värien käyttö
+  - Pelin tilan hallintaa ja pelaajien vuorojen vaihtoa
+  - Boolean-arvojen käyttö (voittaja / tasapeli)
+
+---
+
+## Versiohistoria
+- **1.0** – Peruslogiikka ja ruudukon tulostus  
+- **1.1** – Arrow key liikuttaminen ja ENTER syötteen käyttö  
+- **1.2** – Tasapelin ja voiton tarkistus, R-näppäin uudelleenkäynnistykseen  
+- **1.3** – Kolmen luokan rakenne: Program, GameLogic, BoardPrinter  
+- **1.4** – Värit lisätty: X = punainen, O = vihreä, kohdistin taustalla  
+
+---
+
+## Tulevat parannukset (valinnainen)
+- Mahdollisuus tallentaa pelin historia tekstitiedostoon  
+- Peli yksinpeliä vastaan (AI)  
+- Parempi graafinen esitys (ASCII / Console art)
+
+---
+
+## Yhteenveto
+Tämä projekti on valmis **näytettäväksi kouluprojektina** tai Git-portfolioon.  
+Se demonstroi selkeästi:  
+
+- Olio-ohjelmointia ja metodien käyttöä  
+- Konsoli-IO:n hallintaa  
+- Pelin logiikan suunnittelua  
+- Käyttäjäystävällisen, värillisen konsolinäkymän toteuttamista  
+- Boolean-arvojen hyödyntämistä pelin tilan hallinnassa  
