@@ -1,7 +1,7 @@
 ﻿/*
     Ohjelma: Ristinolla Konsolipeli
     Tekijä: Marcus Stenberg
-    Versio: 1.3
+    Versio: 1.4
     Päivämäärä: 12.03.2026
     Selitys ohjelmasta: 
         Tämä on yksinkertainen kahden pelaajan Ristinolla-peli konsolissa.
@@ -20,7 +20,7 @@
         - Näyttää, kumman pelaajan vuoro on
 */
 
-using System; // Käytetään konsoliin liittyviä toimintoja
+using System;
 
 namespace TikTak_Projekti_Marcus_Stenberg
 {
@@ -28,107 +28,79 @@ namespace TikTak_Projekti_Marcus_Stenberg
     {
         static void Main(string[] args)
         {
-            // Kysytään käyttäjän nimi ja tallennetaan muuttujaan
-            Console.Write("Hei! Mikä on nimesi? ");
-            string playerName = Console.ReadLine(); // Luetaan käyttäjän syöte konsolista
+            // Kysytään pelaajien nimet
+            Console.Write("Hei! Mikä on pelaaja X:n nimi? ");
+            string playerXName = Console.ReadLine();
+            Console.Write("Mikä on pelaaja O:n nimi? ");
+            string playerOName = Console.ReadLine();
 
             // Tallennetaan pelin aloitusaika
             DateTime startTime = DateTime.Now;
 
-            // Luodaan pelin logiikka-olio ja tulostusolio
+            // Luodaan pelin olio, tulostusolio ja käyttöliittymäolio
             GameLogic game = new GameLogic();
             BoardPrinter printer = new BoardPrinter();
+            UI ui = new UI();
 
-            int cursor = 0; // Määritetään kohdistimen alkupaikka (ylin vasen ruutu = 0)
+            int cursor = 0; // Kohdistimen alkupaikka (ylin vasen ruutu)
 
-            while (true) // Pääsilmukka alkaa
+            while (true) // Pääsilmukka
             {
-                Console.Clear(); // Tyhjennetään konsoli jokaisella kierroksella
-                Console.WriteLine("Pelaaja: " + playerName); // Näytetään pelaajan nimi
-                Console.WriteLine("Peli alkoi: " + startTime); // Näytetään pelin aloitusaika
-                Console.WriteLine("Käytä NUOLI-näppäimiä liikkuaksesi, ENTER asettaa symbolin.");
-                Console.WriteLine("ESC lopettaa pelin milloin tahansa.");
-                Console.WriteLine("Nykyinen vuoro: Pelaaja " + game.CurrentPlayer); // Näytetään, kumman vuoro
+                Console.Clear(); // Tyhjennetään konsoli
+                ui.PrintHeader(playerXName, playerOName, startTime, game.CurrentPlayer); // Tulostetaan info
+                printer.PrintBoard(game.Board, cursor); // Tulostetaan lauta
 
-                printer.PrintBoard(game.Board, cursor); // Tulostetaan pelilauta
-
-                // Luetaan näppäin painallus ilman konsoliin näyttämistä
+                // Luetaan käyttäjän näppäin
                 ConsoleKey key = Console.ReadKey(true).Key;
 
-                // Tarkistetaan, onko ESC painettu -> ohjelma lopetetaan
+                // Tarkistetaan ESC -> lopetetaan ohjelma
                 if (key == ConsoleKey.Escape)
                 {
-                    Console.WriteLine("Ohjelma lopetettiin käyttäjän toimesta.");
-                    break; // Poistutaan pääsilmukasta
+                    ui.PrintExitMessage(); // Viesti lopetuksesta
+                    break;
                 }
 
-                // Tarkistetaan nuolinäppäimet ja liikutetaan kohdistinta
-                if (key == ConsoleKey.UpArrow && cursor > 2) cursor -= 3; // Siirretään ylös
-                else if (key == ConsoleKey.DownArrow && cursor < 6) cursor += 3; // Siirretään alas
-                else if (key == ConsoleKey.LeftArrow && cursor % 3 != 0) cursor -= 1; // Siirretään vasemmalle
-                else if (key == ConsoleKey.RightArrow && cursor % 3 != 2) cursor += 1; // Siirretään oikealle
-                else if (key != ConsoleKey.Enter) // Tarkistetaan, että painettu näppäin ei ole hyväksytty
+                // Näytä aiemmat tulokset, jos käyttäjä painaa V
+                if (key == ConsoleKey.V)
                 {
-                    // Ilmoitetaan virheellinen näppäin
-                    Console.WriteLine("Virheellinen näppäin! Käytä nuolia, ENTER tai ESC.");
-                    Console.ReadKey(true); // Odotetaan, että käyttäjä painaa mitä tahansa
-                    continue; // Aloitetaan pääsilmukan uusi kierros
+                    ui.ViewResults();
+                    continue;
                 }
 
-                // Jos painetaan ENTER -> yritetään asettaa symboli
+                // Liikutetaan kohdistinta
+                cursor = ui.MoveCursor(key, cursor); // Käytetään UserInterface luokan funktiota
+
+                // ENTER -> asetetaan symboli
                 if (key == ConsoleKey.Enter)
                 {
-                    if (game.Board[cursor] == ' ') // Tarkistetaan, onko ruutu tyhjä
-                    {
-                        game.Board[cursor] = game.CurrentPlayer; // Asetetaan nykyisen pelaajan symboli
-                        game.LastPlayer = game.CurrentPlayer; // Tallennetaan viimeiseksi pelannut pelaaja
+                    if (!ui.PlaceSymbol(game, cursor)) continue; // Tarkistaa ruudun vapautta, palauttaa false jos varattu
 
-                        // Vaihdetaan pelaaja IF-lauseella
-                        if (game.CurrentPlayer == 'X') game.CurrentPlayer = 'O';
-                        else game.CurrentPlayer = 'X';
-                    }
-                    else // Jos ruutu on jo varattu
-                    {
-                        Console.WriteLine("Tuo ruutu on jo varattu! Paina mitä tahansa jatkaaksesi...");
-                        Console.ReadKey(true); // Odotetaan näppäinpainallusta
-                        continue; // Aloitetaan pääsilmukan uusi kierros
-                    }
-
-                    // Tarkistetaan voittaja IF-lauseilla
+                    // Tarkistetaan voittaja
                     if (game.CheckWinner())
                     {
-                        Console.Clear(); // Tyhjennetään ruutu
-                        printer.PrintBoard(game.Board, cursor); // Tulostetaan lopullinen lauta
-                        Console.WriteLine("Onnittelut! Pelaaja " + game.LastPlayer + " voitti!");
-                        Console.WriteLine("Paina R aloittaaksesi uuden pelin tai ESC lopettaaksesi.");
-
-                        while (true) // Silmukka, jolla käyttäjä voi valita uudelleen
-                        {
-                            ConsoleKey choice = Console.ReadKey(true).Key;
-                            if (choice == ConsoleKey.R) { game.ResetGame(); break; } // IF: jos R -> uusi peli
-                            else if (choice == ConsoleKey.Escape) { return; } // IF: jos ESC -> lopetetaan ohjelma
-                        }
+                        Console.Clear();
+                        printer.PrintBoard(game.Board, cursor);
+                        // Näytetään voittaja nimen kanssa
+                        string winnerName = game.LastPlayer == 'X' ? playerXName : playerOName;
+                        ui.PrintWinner(winnerName);
+                        // Tallennetaan tulos
+                        ui.SaveResult(winnerName, game.LastPlayer, DateTime.Now, game.TurnCount);
+                        if (!ui.PlayAgain(game)) break; // Kysytään uusi peli tai lopetus
                     }
-
-                    // Tarkistetaan tasapeli IF-lauseella
+                    // Tarkistetaan tasapeli
                     else if (game.CheckDraw())
                     {
-                        Console.Clear(); // Tyhjennetään ruutu
-                        printer.PrintBoard(game.Board, cursor); // Tulostetaan lopullinen lauta
-                        Console.WriteLine("Peli päättyi tasapeliin!");
-                        Console.WriteLine("Paina R aloittaaksesi uuden pelin tai ESC lopettaaksesi.");
-
-                        while (true) // Silmukka, jolla käyttäjä voi valita uudelleen
-                        {
-                            ConsoleKey choice = Console.ReadKey(true).Key;
-                            if (choice == ConsoleKey.R) { game.ResetGame(); break; } // IF: jos R -> uusi peli
-                            else if (choice == ConsoleKey.Escape) { return; } // IF: jos ESC -> lopetetaan ohjelma
-                        }
+                        Console.Clear();
+                        printer.PrintBoard(game.Board, cursor);
+                        ui.PrintDraw(); // Näytetään tasapeli
+                        // Tallennetaan tasapeli
+                        ui.SaveResult(playerXName + " vs " + playerOName, null, DateTime.Now, game.TurnCount);
+                        if (!ui.PlayAgain(game)) break; // Kysytään uusi peli tai lopetus
                     }
                 }
             }
 
-            Console.WriteLine("Kiitos pelaamisesta! Näkemiin!"); // Lopuksi kiitetään pelaajaa
+            Console.WriteLine("Kiitos pelaamisesta! Näkemiin!");
         }
     }
 }
