@@ -33,10 +33,15 @@ Ohjelma tunnistaa automaattisesti **voiton (vaaka, pysty, vino)** ja **tasapelin
 
 ## Projektin rakenne
 TikTak_Projekti_Marcus_Stenberg/
+
 │
+
 ├─ Program.cs # Pääohjelma, käyttäjän syötteet, pääsilmukka
+
 ├─ GameLogic.cs # Pelin säännöt, lauta, tarkistukset voittajalle ja tasapelille
+
 ├─ BoardPrinter.cs # Lautan tulostus, värit ja kohdistimen näyttäminen
+
 └─ README.md # Tämä tiedosto
 
 ---
