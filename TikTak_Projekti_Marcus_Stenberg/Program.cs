@@ -1,4 +1,5 @@
 ﻿using System;
+using TikTak_Projekti_Marcus_Stenberg;
 
 namespace TikTak_Projekti_Marcus_Stenberg
 {
@@ -10,38 +11,79 @@ namespace TikTak_Projekti_Marcus_Stenberg
             Console.Write("Enter your name: ");
             string playerName = Console.ReadLine();
 
-            // Save date and time
+            // Save start time
             DateTime startTime = DateTime.Now;
-
-            // Print welcome message
-            Console.WriteLine("Welcome to Tic Tac Toe " + playerName);
-            Console.WriteLine("Game started at: " + startTime);
 
             // Create objects
             GameLogic game = new GameLogic();
             BoardPrinter printer = new BoardPrinter();
 
-            // Game loop
+            // Cursor position
+            int cursor = 0;
+
             while (true)
             {
-                // Print board
-                printer.PrintBoard(game.Board);
+                // Clear screen
+                Console.Clear();
 
-                // Ask move
-                Console.Write("Enter position (1-9) or 0 to quit: ");
-                int move = int.Parse(Console.ReadLine());
+                // Print information
+                Console.WriteLine("Player: " + playerName);
+                Console.WriteLine("Started: " + startTime);
+                Console.WriteLine("Use WASD to move, E to place, Q to quit");
 
-                // Exit program
-                if (move == 0)
+                // Print board with cursor
+                printer.PrintBoard(game.Board, cursor);
+
+                // Read key
+                ConsoleKey key = Console.ReadKey(true).Key;
+
+                if (key == ConsoleKey.Q)
                 {
                     break;
                 }
 
-                // Make move
-                game.MakeMove(move);
+                if (key == ConsoleKey.W)
+                {
+                    cursor = cursor - 3;
+                    if (cursor < 0)
+                    {
+                        cursor = 0;
+                    }
+                }
+
+                if (key == ConsoleKey.S)
+                {
+                    cursor = cursor + 3;
+                    if (cursor > 8)
+                    {
+                        cursor = 8;
+                    }
+                }
+
+                if (key == ConsoleKey.A)
+                {
+                    cursor = cursor - 1;
+                    if (cursor < 0)
+                    {
+                        cursor = 0;
+                    }
+                }
+
+                if (key == ConsoleKey.D)
+                {
+                    cursor = cursor + 1;
+                    if (cursor > 8)
+                    {
+                        cursor = 8;
+                    }
+                }
+
+                if (key == ConsoleKey.E)
+                {
+                    game.MakeMove(cursor + 1);
+                }
             }
 
-            // Exit message
             Console.WriteLine("Program closing. Thank you for playing.");
         }
     }
