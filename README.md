@@ -110,8 +110,7 @@ TikTak_Projekti_Marcus_Stenberg/
 ---
 
 ## Yhteenveto
-Tämä projekti on valmis **näytettäväksi kouluprojektina** tai Git-portfolioon.  
-Se demonstroi selkeästi:  
+Demonstroituja funktioita:  
 
 - Olio-ohjelmointia ja metodien käyttöä  
 - Konsoli-IO:n hallintaa  
