@@ -83,8 +83,8 @@ namespace TikTak_Projekti_Marcus_Stenberg
                         // Näytetään voittaja nimen kanssa
                         string winnerName = game.LastPlayer == 'X' ? playerXName : playerOName;
                         ui.PrintWinner(winnerName);
-                        // Tallennetaan tulos
-                        ui.SaveResult(winnerName, game.LastPlayer, DateTime.Now, game.TurnCount);
+                        // Tallennetaan tulos (molemmat pelaajat)
+                        ui.SaveResult(playerXName, playerOName, game.LastPlayer, DateTime.Now, game.TurnCount);
                         if (!ui.PlayAgain(game)) break; // Kysytään uusi peli tai lopetus
                     }
                     // Tarkistetaan tasapeli
@@ -93,8 +93,8 @@ namespace TikTak_Projekti_Marcus_Stenberg
                         Console.Clear();
                         printer.PrintBoard(game.Board, cursor);
                         ui.PrintDraw(); // Näytetään tasapeli
-                        // Tallennetaan tasapeli
-                        ui.SaveResult(playerXName + " vs " + playerOName, null, DateTime.Now, game.TurnCount);
+                        // Tallennetaan tasapeli (molemmat pelaajat)
+                        ui.SaveResult(playerXName, playerOName, null, DateTime.Now, game.TurnCount);
                         if (!ui.PlayAgain(game)) break; // Kysytään uusi peli tai lopetus
                     }
                 }

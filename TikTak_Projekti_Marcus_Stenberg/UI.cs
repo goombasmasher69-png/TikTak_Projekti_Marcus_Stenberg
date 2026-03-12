@@ -78,12 +78,21 @@ namespace TikTak_Projekti_Marcus_Stenberg
             }
         }
 
-        // Tallentaa pelin lopputuloksen tiedostoon
-        public void SaveResult(string playerName, char? winner, DateTime time, int turns)
+        // Tallentaa pelin lopputuloksen tiedostoon (molemmat pelaajat)
+        public void SaveResult(string playerXName, string playerOName, char? winner, DateTime time, int turns)
         {
             string path = "results.txt";
-            string result = winner.HasValue ? $"Voittaja: {winner.Value}" : "Tasapeli";
-            string line = $"{time:yyyy-MM-dd HH:mm:ss} - Pelaaja: {playerName} - {result} - Siirrot: {turns}";
+            string winnerText;
+            if (winner.HasValue)
+            {
+                winnerText = winner.Value == 'X' ? playerXName + " (X)" : playerOName + " (O)";
+            }
+            else
+            {
+                winnerText = "Tasapeli";
+            }
+
+            string line = $"{time:yyyy-MM-dd HH:mm:ss} - X: {playerXName} - O: {playerOName} - Voittaja: {winnerText} - Siirrot: {turns}";
 
             try
             {
