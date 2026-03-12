@@ -4,50 +4,50 @@ namespace TikTak_Projekti_Marcus_Stenberg
 {
     public class GameLogic
     {
-        public char[] Board { get; set; } // Pelilauta 9 ruutua
-        public char CurrentPlayer { get; set; } // Kumman pelaajan vuoro
-        public char LastPlayer { get; set; } // Viimeksi pelannut pelaaja
+        public char[] Board { get; set; } // Pelilauta, 9 ruutua, johon X tai O asetetaan
+        public char CurrentPlayer { get; set; } // Kumman pelaajan vuoro on
+        public char LastPlayer { get; set; } // Viimeksi pelannut pelaaja, käytetään voittajan näyttämiseen
 
         public GameLogic()
         {
-            Board = new char[9]; // Luodaan 9 ruutua
-            for (int i = 0; i < 9; i++) Board[i] = ' '; // Alustetaan tyhjiksi
-            CurrentPlayer = 'X'; // Aloitetaan X:llä
+            Board = new char[9]; // Luodaan 9 ruutua taulukkoon
+            for (int i = 0; i < 9; i++) Board[i] = ' '; // Käydään kaikki ruudut läpi ja alustetaan tyhjiksi
+            CurrentPlayer = 'X'; // Aloitetaan pelin X:llä
         }
 
-        // Nollaa pelin
+        // Funktio pelin nollaamiseen eli uuden pelin aloittamiseen
         public void ResetGame()
         {
-            for (int i = 0; i < 9; i++) Board[i] = ' '; // Tyhjennetään lauta
-            CurrentPlayer = 'X'; // Aloitetaan uudelleen X:llä
+            for (int i = 0; i < 9; i++) Board[i] = ' '; // Käydään kaikki ruudut läpi ja tyhjennetään ne
+            CurrentPlayer = 'X'; // Aloitetaan uusi peli X:llä
         }
 
-        // Tarkistaa voittajan
+        // Funktio voittajan tarkistamiseen
         public bool CheckWinner()
         {
-            char[] b = Board;
+            char[] b = Board; // Lyhennetään taulukon nimeä käytön helpottamiseksi
 
-            // Vaakasuunnassa
-            if (b[0] != ' ' && b[0] == b[1] && b[1] == b[2]) return true;
-            if (b[3] != ' ' && b[3] == b[4] && b[4] == b[5]) return true;
-            if (b[6] != ' ' && b[6] == b[7] && b[7] == b[8]) return true;
+            // Tarkistetaan vaakarivit IF-lauseilla
+            if (b[0] != ' ' && b[0] == b[1] && b[1] == b[2]) return true; // Ylin vaakarivi
+            if (b[3] != ' ' && b[3] == b[4] && b[4] == b[5]) return true; // Keskimmäinen vaakarivi
+            if (b[6] != ' ' && b[6] == b[7] && b[7] == b[8]) return true; // Alin vaakarivi
 
-            // Pystysuunnassa
-            if (b[0] != ' ' && b[0] == b[3] && b[3] == b[6]) return true;
-            if (b[1] != ' ' && b[1] == b[4] && b[4] == b[7]) return true;
-            if (b[2] != ' ' && b[2] == b[5] && b[5] == b[8]) return true;
+            // Tarkistetaan pystyrivit IF-lauseilla
+            if (b[0] != ' ' && b[0] == b[3] && b[3] == b[6]) return true; // Vasen pystyrivi
+            if (b[1] != ' ' && b[1] == b[4] && b[4] == b[7]) return true; // Keskimmäinen pystyrivi
+            if (b[2] != ' ' && b[2] == b[5] && b[5] == b[8]) return true; // Oikea pystyrivi
 
-            // Vinosti
-            if (b[0] != ' ' && b[0] == b[4] && b[4] == b[8]) return true;
-            if (b[2] != ' ' && b[2] == b[4] && b[4] == b[6]) return true;
+            // Tarkistetaan vinot linjat IF-lauseilla
+            if (b[0] != ' ' && b[0] == b[4] && b[4] == b[8]) return true; // Vino vasen yläkulma -> oikea alakulma
+            if (b[2] != ' ' && b[2] == b[4] && b[4] == b[6]) return true; // Vino oikea yläkulma -> vasen alakulma
 
-            return false; // Ei voittajaa
+            return false; // Jos ei voittajaa, palautetaan false
         }
 
-        // Tarkistaa tasapelin
+        // Funktio tasapelin tarkistamiseen
         public bool CheckDraw()
         {
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 9; i++) // Käydään kaikki ruudut läpi
             {
                 if (Board[i] == ' ') return false; // Jos löytyy tyhjä ruutu -> ei tasapeli
             }
@@ -57,30 +57,32 @@ namespace TikTak_Projekti_Marcus_Stenberg
 
     public class BoardPrinter
     {
-        // Tulostaa pelilaudan
+        // Funktio pelilaudan tulostamiseen
         public void PrintBoard(char[] board, int cursor)
         {
-            Console.WriteLine(); // Tyhjä rivi
+            Console.WriteLine(); // Lisätään tyhjä rivi ennen lautaa
 
-            for (int row = 0; row < 3; row++) // Käydään rivit läpi
+            for (int row = 0; row < 3; row++) // Käydään rivit läpi 0,1,2
             {
-                for (int col = 0; col < 3; col++) // Käydään sarakkeet läpi
+                for (int col = 0; col < 3; col++) // Käydään sarakkeet läpi 0,1,2
                 {
-                    int index = row * 3 + col; // Lasketaan indeksi
+                    int index = row * 3 + col; // Lasketaan indeksin sijainti taulukossa
 
-                    if (index == cursor) // Jos kohdistin tässä ruudussa
-                        Console.Write("[" + board[index] + "]"); // Näytetään hakasulkeissa
+                    // Tarkistetaan, onko kohdistin tässä ruudussa
+                    if (index == cursor)
+                        Console.Write("[" + board[index] + "]"); // Näytetään kohdistin hakasulkeissa
                     else
-                        Console.Write(" " + board[index] + " "); // Muuten normaali
+                        Console.Write(" " + board[index] + " "); // Normaaliruuduissa tyhjä tila ympärillä
 
-                    if (col < 2) Console.Write("|"); // Sarake-erotin
+                    if (col < 2) Console.Write("|"); // Tulostetaan pystysuora viiva sarakkeiden väliin
                 }
-                Console.WriteLine(); // Rivi loppuu
 
-                if (row < 2) Console.WriteLine("---+---+---"); // Rivi-erotin
+                Console.WriteLine(); // Rivi loppuu, siirrytään seuraavalle riville
+
+                if (row < 2) Console.WriteLine("---+---+---"); // Tulostetaan vaakaviiva rivien väliin
             }
 
-            Console.WriteLine(); // Tyhjä rivi lopuksi
+            Console.WriteLine(); // Lisätään tyhjä rivi lopuksi
         }
     }
 }
