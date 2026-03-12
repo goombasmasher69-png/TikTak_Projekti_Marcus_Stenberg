@@ -1,7 +1,7 @@
 # Ristinolla Konsolipeli
 
 **Tekijä:** Marcus Stenberg  
-**Versio:** 1.4  
+**Versio:** 1.5  
 **Päivämäärä:** 12.03.2026  
 
 ---
